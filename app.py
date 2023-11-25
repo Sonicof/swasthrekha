@@ -1,6 +1,23 @@
 from flask import Flask, render_template, request, jsonify
+import pickle
+import pypyodbc as odbc
+
+
+try:
+    server = 'staladatabase.database.windows.net'
+    database = 'staladb'
+    connection_string = 'Driver={ODBC Driver 18 for SQL Server};Server=tcp:staladatabase.database.windows.net,1433;Database=staladb;Uid=rootuserrohan;Pwd=ROHAN@jais12345;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
+    mycon = odbc.connect(connection_string)
+
+except:
+    print("Unable to establish connection to database server!!")
+
 
 app = Flask(__name__)
+
+diabetes_model=pickle.load(open("diabetes_model.sav",'rb'))
+heart_model=pickle.load(open("heart_disease_model.sav",'rb'))
+lung_cancer_model=pickle.load(open("lung_cancer_model.sav",'rb'))
 
 @app.route('/')
 def index():
@@ -9,62 +26,78 @@ def index():
 @app.route('/predict/heart', methods=['POST'])
 def predict_heart():
     data = request.form
-    age=data.get('age')
-    sex=data.get('sex')
-    cp=data.get('cp')
-    trestbps=data.get('trestbps')
-    chol=data.get('chol')
-    fbs=data.get('fbs')
-    rest_ecg=data.get('rest_ecg')
-    thalach=data.get('thalach')
-    exang=data.get('exang')
-    oldpeak = data.get('oldpeak')
-    slope = data.get('slope')
-    ca=data.get('ca')
-    thal=data.get('thal')
-
-    result = {"prediction": "Heart prediction result"}
-    return jsonify(result)
+    age=int(data.get('age'))
+    sex=int(data.get('sex'))
+    cp=int(data.get('cp'))
+    trestbps=int(data.get('trestbps'))
+    chol=int(data.get('chol'))
+    fbs=int(data.get('fbs'))
+    rest_ecg=int(data.get('rest_ecg'))
+    thalach=int(data.get('thalach'))
+    exang=int(data.get('exang'))
+    oldpeak = int(data.get('oldpeak'))
+    slope = int(data.get('slope'))
+    ca=int(data.get('ca'))
+    thal=int(data.get('thal'))
+    heart_prediction = heart_model.predict(
+        [[age, sex, cp, trestbps, chol, fbs, rest_ecg, thalach, exang, oldpeak, slope, ca, thal]])
+    if (heart_prediction[0] == 1):
+        heart_diagnosis = 'The person has a heart disease'
+    else:
+        heart_diagnosis = 'The person does not have any heart disease'
+    return jsonify({"prediction": heart_diagnosis})
 
 @app.route('/predict/diabetes', methods=['POST'])
 def predict_diabetes():
     data = request.form
-    pregnancies=data.get('pregnancies')
-    glucose=data.get('glucose')
-    bloodpressure=data.get('bloodpressure')
-    skinthickness=data.get('skinthickness')
-    insulin=data.get('insulin')
-    bmi=data.get('bmi')
-    dpf=data.get('DiabetesPedigreeFunction')
-    age=data.age('age')
+    pregnancies=int(data.get('pregnancies'))
+    glucose=int(data.get('glucose'))
+    bloodpressure=int(data.get('bloodpressure'))
+    skinthickness=int(data.get('skinthickness'))
+    insulin=int(data.get('insulin'))
+    bmi=int(data.get('bmi'))
+    dpf=int(data.get('DiabetesPedigreeFunction'))
+    age=int(data.get('age'))
     result = {"prediction": "Diabetes prediction result"}
-    return jsonify(result)
+    diab_prediction = diabetes_model.predict(
+        [[pregnancies, glucose, bloodpressure, skinthickness, insulin, bmi, dpf , age]])
+    if (diab_prediction[0] == 1):
+        diab_diagnosis = 'The person is diabetic'
+    else:
+        diab_diagnosis = 'The person is not diabetic'
+    return jsonify({"prediction": diab_diagnosis})
 
 @app.route('/predict/lung', methods=['POST'])
 def predict_lung():
     data = request.form
-    age = data.age('age')
-    smoking = data.age('smoking')
-    yellow_fingers = data.age('yellow_fingers')
-    anxiety = data.age('anxiety')
-    peer_pressure = data.age('peer_pressure')
-    Chronic_Disease = data.age('Chronic_Diseases')
-    Fatigue = data.age('Fatigue')
-    Allergy = data.age('Allergy')
-    wheezing = data.age('wheezing')
-    Alcohol = data.age('Alcohol')
-    Coughing = data.age('Coughing')
-    Shortness_of_Breath = data.age('Shotness_of_Breath')
-    Swallowing_Difficulty = data.age('Swallowing_Difficulty')
-    Chest_pain = data.age('Chest_pain')
-    Lung_Cancer=data.get("Lung_Cancer")
+    age = data.get('age')
+    if(age.lower()=='m'):
+        age=1
+    if(age.lower()=='f'):
+        age=0
+    smoking = int(data.get('smoking'))
+    yellow_fingers = int(data.get('yellow_fingers'))
+    anxiety = int(data.get('anxiety'))
+    peer_pressure = int(data.get('peer_pressure'))
+    Chronic_Disease = int(data.get('Chronic_Diseases'))
+    Fatigue = int(data.get('Fatigue'))
+    Allergy = int(data.get('Allergy'))
+    wheezing = int(data.get('wheezing'))
+    Alcohol = int(data.get('Alcohol'))
+    Coughing = int(data.get('Coughing'))
+    Shortness_of_Breath = int(data.get('Shotness_of_Breath'))
+    Swallowing_Difficulty = int(data.get('Swallowing_Difficulty'))
+    Chest_pain = int(data.get('Chest_pain'))
+    Lung_Cancer=int(data.get("Lung_Cancer"))
 
+    lung_pred=lung_cancer_model.predict([[age,smoking,yellow_fingers,anxiety,peer_pressure,Chronic_Disease,Fatigue,
+                                          Allergy,wheezing,Alcohol,Coughing,Shortness_of_Breath,Swallowing_Difficulty,Chest_pain,Lung_Cancer]])
+    if (lung_pred[0] == 1):
+        lung_pred = 'The person is diabetic'
+    else:
+        lung_pred = 'The person is not diabetic'
+    return jsonify({"prediction": lung_pred})
 
-
-    # Process the data as needed
-    # Perform computations based on the lung prediction form data
-    result = {"prediction": "Lung prediction result"}
-    return jsonify(result)
 
 @app.route('/feedback', methods=['POST'])
 def feedback():
