@@ -9,14 +9,32 @@ body {
   color: #555;
   background-color: #f6f6f6;
 }
+#heart-result{
+  font-family: Arial, sans-serif;
+  color: black;
+}
+
+#diabetes-result{
+  font-family: Arial, sans-serif;
+  color: black;
+}
+#lung-result{
+  font-family: Arial, sans-serif;
+  color: black;
+}
 
 h1, h2 {
   color: #444;
   font-weight: bold;
 }
+h1{
+  text-align: center;
+
+}
 
 p {
   color: #777;
+  font-family: Arial, sans-serif;
 }
 
 /* Header styles */
