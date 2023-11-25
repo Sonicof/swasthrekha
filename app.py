@@ -1,14 +1,14 @@
 from flask import Flask, render_template, request, jsonify
 import pickle
 import pypyodbc as odbc
-
+import yagmail
 
 try:
     server = 'staladatabase.database.windows.net'
     database = 'staladb'
     connection_string = 'Driver={ODBC Driver 18 for SQL Server};Server=tcp:staladatabase.database.windows.net,1433;Database=staladb;Uid=rootuserrohan;Pwd=ROHAN@jais12345;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
     mycon = odbc.connect(connection_string)
-
+    cursor = mycon.cursor()
 except:
     print("Unable to establish connection to database server!!")
 
@@ -39,8 +39,13 @@ def predict_heart():
     slope = int(data.get('slope'))
     ca=int(data.get('ca'))
     thal=int(data.get('thal'))
+    email=data.get('email')
     heart_prediction = heart_model.predict(
         [[age, sex, cp, trestbps, chol, fbs, rest_ecg, thalach, exang, oldpeak, slope, ca, thal]])
+    st = "INSERT INTO patient (email,disease,output1) VALUES ('{}',{},{})".format(email,0,heart_prediction[0]
+        )
+    cursor.execute(st);
+    mycon.commit()
     if (heart_prediction[0] == 1):
         heart_diagnosis = 'The person has a heart disease'
     else:
@@ -58,9 +63,14 @@ def predict_diabetes():
     bmi=int(data.get('bmi'))
     dpf=int(data.get('DiabetesPedigreeFunction'))
     age=int(data.get('age'))
+    email = data.get('email')
     result = {"prediction": "Diabetes prediction result"}
     diab_prediction = diabetes_model.predict(
         [[pregnancies, glucose, bloodpressure, skinthickness, insulin, bmi, dpf , age]])
+    st = "INSERT INTO patient (email,disease,output1) VALUES ('{}',{},{})".format(email, 1, diab_prediction[0]
+                                                                                  )
+    cursor.execute(st);
+    mycon.commit()
     if (diab_prediction[0] == 1):
         diab_diagnosis = 'The person is diabetic'
     else:
@@ -89,9 +99,14 @@ def predict_lung():
     Swallowing_Difficulty = int(data.get('Swallowing_Difficulty'))
     Chest_pain = int(data.get('Chest_pain'))
     Lung_Cancer=int(data.get("Lung_Cancer"))
+    email = data.get('email')
 
     lung_pred=lung_cancer_model.predict([[age,smoking,yellow_fingers,anxiety,peer_pressure,Chronic_Disease,Fatigue,
                                           Allergy,wheezing,Alcohol,Coughing,Shortness_of_Breath,Swallowing_Difficulty,Chest_pain,Lung_Cancer]])
+    st = "INSERT INTO patient (email,disease,output1) VALUES ('{}',{},{})".format(email, 2, lung_pred[0]
+                                                                                  )
+    cursor.execute(st);
+    mycon.commit()
     if (lung_pred[0] == 1):
         lung_pred = 'The person is diabetic'
     else:
@@ -109,6 +124,10 @@ def feedback():
     # Process the feedback data
     # Save the feedback or perform other actions as needed
     result = {"message": "Feedback received successfully"}
+    st = "INSERT INTO feedback (email,comment) VALUES ('{}','{}')".format(email, comment
+                                                                                  )
+    cursor.execute(st);
+    mycon.commit()
     return jsonify(result)
 
 if __name__ == '__main__':
