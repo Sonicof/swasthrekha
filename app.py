@@ -6,7 +6,7 @@ import yagmail
 try:
     server = 'staladatabase.database.windows.net'
     database = 'staladb'
-    connection_string = 'Driver={ODBC Driver 18 for SQL Server};Server=tcp:staladatabase.database.windows.net,1433;Database=staladb;Uid=rootuserrohan;Pwd=ROHAN@jais12345;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
+    connection_string = 'Driver={ODBC Driver 18 for SQL Server};Server=tcp:staladatabase.database.windows.net,1433;Database=;Uid=;Pwd=;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
     mycon = odbc.connect(connection_string)
     cursor = mycon.cursor()
 except:
