@@ -47,12 +47,14 @@
         <input type="text" id="exang" name="exang" placeholder=" (1 = yes; 0 = no)" required>
         <label for="oldpeak">ST depression induced by exercise relative to rest:</label>
         <input type="text" id="oldpeak" name="oldpeak" placeholder=" (1 = yes; 0 = no)" required>
-        <label for="slope">ST depression induced by exercise relative to rest:</label>
+        <label for="slope">The slope of the peak exercise ST segment:</label>
         <input type="text" id="slope" name="slope" placeholder="(Value 1: upsloping, Value 2: flat, Value 3: downsloping)" required>
         <label for="ca">The number of major ca:</label>
         <input type="text" id="ca" name="ca" placeholder=" (0-3)" required>
         <label for="thal">A blood disorder called thalassemia :</label>
         <input type="text" id="thal" name="thal" placeholder=" (1 =fixed defect (no blood flow in some part of the heart); 2 = normal blood flow; 3 = reversible defect (a blood flow is observed but it is not normal))" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
         <button type="submit">Submit</button>
       </form>
       <!-- Heart disethalach prediction result -->
@@ -80,6 +82,8 @@
         <input type="text" id="DiabetesPedigreeFunction" name="DiabetesPedigreeFunction:" placeholder="Body mass index (weight in kg/(height in m)^2)" required>
         <label for="age">Age:</label>
         <input type="text" id="age" name="age" placeholder="Enter your age in years" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
         <button type="submit">Submit</button>
       </form>
       <!-- Diabetes prediction result -->
@@ -91,6 +95,8 @@
       <p>Enter the following information to get a prediction of your risk of having lung cancer.</p>
       <!-- Lung cancer form -->
       <form id="lung-form" onsubmit="submitForm(event, 'lung')" action="/predict/lung" method="POST">
+        <label for="gender">Gender:</label>
+        <input type="text" id="gender" name="gender" placeholder="Enter your Gender (1 for male, 0 for female)" required>
         <label for="age">Age:</label>
         <input type="text" id="age" name="age" placeholder="Enter your age in years" required>
         <label for="smoking">Smoking:</label>
@@ -119,8 +125,8 @@
         <input type="text" id="Swallowing_Difficulty" name="Swallowing_Difficulty" placeholder="YES=2 , NO=1." required>
         <label for="Chest_pain">Chest pain:</label>
         <input type="text" id="Chest_pain" name="Chest_pain" placeholder="YES=2 , NO=1." required>
-        <label for="Lung_Cancer">Lung Cancer:</label>
-        <input type="text" id="Lung_Cancer" name="Lung_Cancer" placeholder="YES=2 , NO=1." required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
         <button type="submit">Submit</button>
       </form>
       <!-- Lung cancer result -->
