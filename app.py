@@ -2,10 +2,51 @@ from flask import Flask, render_template, request, jsonify
 import pickle
 import pypyodbc as odbc
 import yagmail
+import pymysql
 
-connection_string = 'Driver={ODBC Driver 18 for SQL Server};Server=tcp:.net,1433;Database=;Uid=;Pwd=;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
-mycon = odbc.connect(connection_string)
-cursor = mycon.cursor()
+#create a local mysql server on your system and create a database named 'dev'
+
+connection = pymysql.connect(
+    host='localhost',
+    user='root',
+    password='<your_local_server_password>',
+    database='dev',
+    port=3306  # Change the port if needed
+)
+# Create a cursor object
+cursor = connection.cursor()
+
+# Check if the 'patient' table exists
+cursor.execute("SHOW TABLES LIKE 'patient'")
+table_exists = cursor.fetchone()
+
+if not table_exists:
+    # Create the 'patient' table if it doesn't exist
+    cursor.execute("""
+        CREATE TABLE patient (
+            email VARCHAR(20),
+            diseases VARCHAR(50),
+            output1 INT
+        )
+    """)
+
+# Check if the 'feedback' table exists
+cursor.execute("SHOW TABLES LIKE 'feedback'")
+table_exists = cursor.fetchone()
+
+if not table_exists:
+    # Create the 'feedback' table if it doesn't exist
+    cursor.execute("""
+        CREATE TABLE feedback (
+            name VARCHAR(100),
+            email VARCHAR(255),
+            rating integer,
+            comment VARCHAR(255)
+        )
+    """)
+
+# Commit the changes and close the connection
+connection.commit()
 app = Flask(__name__)
 
 diabetes_model=pickle.load(open("diabetes_model.sav",'rb'))
@@ -28,22 +69,23 @@ def predict_heart():
     rest_ecg=int(data.get('rest_ecg'))
     thalach=int(data.get('thalach'))
     exang=int(data.get('exang'))
-    oldpeak = int(data.get('oldpeak'))
+    oldpeak = float(data.get('oldpeak'))
     slope = int(data.get('slope'))
     ca=int(data.get('ca'))
     thal=int(data.get('thal'))
     email=data.get('email')
+    print(age, sex, cp, trestbps, chol, fbs, rest_ecg, thalach, exang, oldpeak, slope, ca, thal)
     heart_prediction = heart_model.predict(
         [[age, sex, cp, trestbps, chol, fbs, rest_ecg, thalach, exang, oldpeak, slope, ca, thal]])
-    st = "INSERT INTO patient (email,disease,output1) VALUES ('{}',{},{})".format(email,0,heart_prediction[0]
+    st = "INSERT INTO patient (email,diseases,output1) VALUES ('{}','{}',{})".format(email,'heart_attack',heart_prediction[0]
         )
     cursor.execute(st);
-    mycon.commit()
+    connection.commit()
     if (heart_prediction[0] == 1):
         heart_diagnosis = 'The person has a heart disease. A personalised email concerning the patient has been sent'
         receiver = email
-        sender = "testingport123@gmail.com"
-        password = "tiplnjgnpqwgvuyo"
+        sender = "<your_email>"
+        password = "<email_password>"
         yag = yagmail.SMTP(sender, password)
         yag.send(
             to=receiver,
@@ -111,17 +153,18 @@ def predict_diabetes():
     age=int(data.get('age'))
     email = data.get('email')
     result = {"prediction": "Diabetes prediction result"}
+    print(pregnancies, glucose, bloodpressure, skinthickness, insulin, bmi, dpf , age)
     diab_prediction = diabetes_model.predict(
         [[pregnancies, glucose, bloodpressure, skinthickness, insulin, bmi, dpf , age]])
-    st = "INSERT INTO patient (email,disease,output1) VALUES ('{}',{},{})".format(email, 1, diab_prediction[0]
+    st = "INSERT INTO patient (email,diseases,output1) VALUES ('{}','{}',{})".format(email,'diabetes', diab_prediction[0]
                                                                                   )
     cursor.execute(st);
-    mycon.commit()
+    connection.commit()
     if (diab_prediction[0] == 1):
         diab_diagnosis = 'The person is diabetic. A personalised email concerning the patient has been sent'
         receiver = email
-        sender = ""
-        password = ""
+        sender = "<your_email>"
+        password = "<email_password>"
         yag = yagmail.SMTP(sender, password)
         yag.send(
             to=receiver,
@@ -199,17 +242,19 @@ def predict_lung():
     Swallowing_Difficulty = int(data.get('Swallowing_Difficulty'))
     Chest_pain = int(data.get('Chest_pain'))
     email = data.get('email')
+    print(gender,age,smoking,yellow_fingers,anxiety,peer_pressure,Chronic_Disease,Fatigue,
+                                          Allergy,wheezing,Alcohol,Coughing,Shortness_of_Breath,Swallowing_Difficulty,Chest_pain)
     lung_pred=lung_cancer_model.predict([[gender,age,smoking,yellow_fingers,anxiety,peer_pressure,Chronic_Disease,Fatigue,
                                           Allergy,wheezing,Alcohol,Coughing,Shortness_of_Breath,Swallowing_Difficulty,Chest_pain]])
-    st = "INSERT INTO patient (email,disease,output1) VALUES ('{}',{},{})".format(email, 2, lung_pred[0]
+    st = "INSERT INTO patient (email,diseases,output1) VALUES ('{}','{}',{})".format(email, 'lung_cancer', lung_pred[0]
                                                                                   )
     cursor.execute(st);
-    mycon.commit()
+    connection.commit()
     if (lung_pred[0] == 1):
         lung_pred = 'The person has chances of suffering from Lung Diseases.A personalised email concerning the patient has been sent'
         receiver = email
-        sender = "testingport123@gmail.com"
-        password = "tiplnjgnpqwgvuyo"
+        sender = "<your_email>"
+        password = "<email_password>"
         yag = yagmail.SMTP(sender, password)
         yag.send(
             to=receiver,
@@ -265,20 +310,20 @@ Team Swasthrekha''')
     return jsonify({"prediction": lung_pred})
 
 
-@app.route('/feedback', methods=['POST'])
+@app.route('/predict/feedback', methods=['POST'])
 def feedback():
     data = request.form
-    rating=data.get('rating')
+    rating=int(data.get('rating'))
     name=data.get('name')
     email=data.get('email')
     comment=data.get('comment')
     # Process the feedback data
     # Save the feedback or perform other actions as needed
     result = {"message": "Feedback received successfully.Your feedback is highly valuable for better development"}
-    st = "INSERT INTO feedback (email,comment) VALUES ('{}','{}')".format(email, comment
+    st = "INSERT INTO feedback (name,email,rating,comment) VALUES ('{}','{}',{},'{}')".format(name,email,rating,comment
                                                                                   )
     cursor.execute(st);
-    mycon.commit()
+    connection.commit()
     return jsonify(result)
 
 if __name__ == '__main__':
