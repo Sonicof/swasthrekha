@@ -152,6 +152,24 @@ button[type="submit"] {
     line-height: 1.4;
 }
 
+/* Add this style to your existing CSS file */
+
+#rating {
+    display: flex;
+}
+
+.rating-option {
+    display: flex;
+    align-items: center;
+    margin-right: 15px; /* Adjust the margin as needed */
+}
+
+.rating-option input {
+    margin-right: 5px; /* Adjust the margin as needed */
+}
+
+
+
 /* Responsive styles */
 @media (max-width: 768px) {
     #side {
