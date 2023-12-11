@@ -78,8 +78,8 @@
         <input type="text" id="insulin" name="insulin" placeholder="2-Hour serum insulin (mu U/ml)" required>
         <label for="bmi">Body Mass Index:</label>
         <input type="text" id="bmi" name="bmi" placeholder="Body mass index (weight in kg/(height in m)^2)" required>
-        <label for="DiabetesPedigreeFunction">Body Mass Index:</label>
-        <input type="text" id="DiabetesPedigreeFunction" name="DiabetesPedigreeFunction:" placeholder="Body mass index (weight in kg/(height in m)^2)" required>
+        <label for="DiabetesPedigreeFunction">Diabetes Pedigree function value(DPF):</label>
+        <input type="text" id="DiabetesPedigreeFunction" name="DiabetesPedigreeFunction" placeholder="Enter DPF value between 0.08 to 2.42" required>
         <label for="age">Age:</label>
         <input type="text" id="age" name="age" placeholder="Enter your age in years" required>
         <label for="email">Email:</label>
@@ -138,7 +138,7 @@
       <h2>Feedback</h2>
       <p>Please share your feedback and rate your experience using our website.</p>
       <!-- Feedback form -->
-      <form id="feedback-form" onsubmit="submitForm(event, 'feedback')" action="/feedback" method="POST">
+      <form id="feedback-form" onsubmit="submitForm(event, 'feedback')" action="/predict/feedback" method="POST">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" placeholder="Enter your name" required>
         <label for="email">Email:</label>
@@ -147,17 +147,28 @@
         <input type="text" id="comment" name="comment" placeholder="Enter your comment" required>
         <label for="rating">Rating:</label>
         <div id="rating">
-          <input type="radio" id="star5" name="rating" value="5" required>
-          <label for="star5" title="5 stars">☆☆☆☆☆</label>
-          <input type="radio" id="star4" name="rating" value="4" required>
-          <label for="star4" title="4 stars">☆☆☆☆</label>
-          <input type="radio" id="star3" name="rating" value="3" required>
-          <label for="star3" title="3 stars">☆☆☆</label>
-          <input type="radio" id="star2" name="rating" value="2" required>
-          <label for="star2" title="2 stars">☆☆</label>
-          <input type="radio" id="star1" name="rating" value="1" required>
-          <label for="star1" title="1 star">☆</label>
+          <div class="rating-option">
+              <input type="radio" id="star5" name="rating" value="5" required>
+              <label for="star5" title="5 stars">☆☆☆☆☆</label>
+          </div>
+          <div class="rating-option">
+              <input type="radio" id="star4" name="rating" value="4" required>
+              <label for="star4" title="4 stars">☆☆☆☆</label>
+          </div>
+          <div class="rating-option">
+              <input type="radio" id="star3" name="rating" value="3" required>
+              <label for="star3" title="3 stars">☆☆☆</label>
+          </div>
+          <div class="rating-option">
+              <input type="radio" id="star2" name="rating" value="2" required>
+              <label for="star2" title="2 stars">☆☆</label>
+          </div>
+          <div class="rating-option">
+              <input type="radio" id="star1" name="rating" value="1" required>
+              <label for="star1" title="1 star">☆</label>
+          </div>
         </div>
+
         <button type="submit">Submit</button>
       </form>
       <!-- Feedback result -->
