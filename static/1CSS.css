@@ -37,12 +37,22 @@ p {
 #side {
     background-color: #ffffff;
     padding: 20px;
+    left: 0px;
     width: 220px;
     height: 100vh;
     position: fixed;
     top: 0;
-    left: 0;
     box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+    transition: all .5s ease;
+}
+
+#side header {
+  font-size: 22px;
+  color: white;
+  line-height: 70px;
+  text-align: center;
+  background: #063146;
+  user-select: none;
 }
 
 #side ul {
@@ -55,17 +65,27 @@ p {
     margin-bottom: 15px;
 }
 
-#side a {
-    color: #333;
-    text-decoration: none;
-    font-size: 16px;
-    transition: color 0.3s ease;
+#side ul a{
+  display: block;
+  height: 100%;
+  width: 100%;
+  line-height: 50px;
+  font-size: 17px;
+  color: #1a73e8 ;
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+    border-top: 1px solid rgba(255,255,255,.1);
+  transition: .4s;
 }
-
+ul li:hover a{
+  padding-left: 20px;
+}
+#side ul a i{
+  margin-right: 16px;
+}
 #side a:hover {
-    color: #1a73e8;
+    color: #0ed7bd;
 }
-
 /* Main content styles */
 #main {
     margin-left: 240px;
@@ -73,6 +93,7 @@ p {
     background-color: #ffffff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease;
+    height: 100vh;
 }
 
 .content {
