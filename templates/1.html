@@ -3,24 +3,31 @@
 <html>
 <head>
   <link rel="stylesheet" href="{{ url_for('static', filename='1CSS.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 </head>
 <body>
   <!-- Header with company name -->
   <div id="header">
+    <input type="checkbox" id="check">
+    <label for="check">
+        <i class="fas fa-bars" id="btn"></i>
+        <i class="fas fa-times" id="cancel"></i>
+    </label>
     <h1>Swasthrekha</h1>
   </div>
   <!-- Sidebar menu -->
   <div id="side">
+    <header>My App</header>
     <ul>
-      <li><a href="#" onclick="showContent('heart')">Heart Disease prediction</a></li>
-      <li><a href="#" onclick="showContent('diabetes')">Diabetes prediction</a></li>
-      <li><a href="#" onclick="showContent('lung')">Lung cancer</a></li>
-      <li><a href="#" onclick="showContent('feedback')">Feedback</a></li>
+      <li><a href="#" onclick="showContent('heart')"><i class="fas fa-heart"></i>Heart Disease prediction</a></li>
+      <li><a href="#" onclick="showContent('diabetes')"><i class="fas fa-vial"></i>Diabetes prediction</a></li>
+      <li><a href="#" onclick="showContent('lung')"><i class="fas fa-lungs"></i>Lung cancer</a></li>
+      <li><a href="#" onclick="showContent('feedback')"><i class="fas fa-receipt"></i>Feedback</a></li>
     </ul>
   </div>
   <!-- Main content -->
   <div id="main">
-      <p>Swasthrekha is a website that cares about your well-being and wants to help you live a healthy and happy life.Swasthrekha is a website that uses machine learning algorithms to predict heart disease, lung cancer, and diabetes. It is a website that aims to help people monitor their health and prevent serious illnesses. Swasthrekha allows you to enter your personal and medical information, and get an assessment for each condition.</p>
+      <p style="text-align: center">Swasthrekha is a website that cares about your well-being and wants to help you live a healthy and happy life.Swasthrekha is a website that uses machine learning algorithms to predict heart disease, lung cancer, and diabetes. It is a website that aims to help people monitor their health and prevent serious illnesses. Swasthrekha allows you to enter your personal and medical information, and get an assessment for each condition.</p>
     <!-- Heart disease prediction content -->
     <div id="heart" class="content">
       <h2>Heart Disease prediction</h2>
