@@ -1,18 +1,16 @@
 from flask import Flask, render_template, request, jsonify
 import pickle
-import pypyodbc as odbc
 import yagmail
 import pymysql
-
-#create a local mysql server on your system and create a database named 'dev'
 
 connection = pymysql.connect(
     host='localhost',
     user='root',
-    password='<your_local_server_password>',
+    password='greenskrulls',
     database='dev',
     port=3306  # Change the port if needed
 )
+print("Connected")
 # Create a cursor object
 cursor = connection.cursor()
 
@@ -22,9 +20,10 @@ table_exists = cursor.fetchone()
 
 if not table_exists:
     # Create the 'patient' table if it doesn't exist
+    print("Creating Table --->")
     cursor.execute("""
         CREATE TABLE patient (
-            email VARCHAR(20),
+            email VARCHAR(255),
             diseases VARCHAR(50),
             output1 INT
         )
@@ -36,6 +35,7 @@ table_exists = cursor.fetchone()
 
 if not table_exists:
     # Create the 'feedback' table if it doesn't exist
+    print("Creating Table -->")
     cursor.execute("""
         CREATE TABLE feedback (
             name VARCHAR(100),
@@ -55,7 +55,7 @@ lung_cancer_model=pickle.load(open("lung_cancer_model.sav",'rb'))
 
 @app.route('/')
 def index():
-    return render_template('1.html')
+    return render_template('11.html')
 
 @app.route('/predict/heart', methods=['POST'])
 def predict_heart():
@@ -66,6 +66,10 @@ def predict_heart():
     trestbps=int(data.get('trestbps'))
     chol=int(data.get('chol'))
     fbs=int(data.get('fbs'))
+    if(fbs>120):
+        fbs=1
+    else:
+        fbs=0
     rest_ecg=int(data.get('rest_ecg'))
     thalach=int(data.get('thalach'))
     exang=int(data.get('exang'))
@@ -84,8 +88,8 @@ def predict_heart():
     if (heart_prediction[0] == 1):
         heart_diagnosis = 'The person has a heart disease. A personalised email concerning the patient has been sent'
         receiver = email
-        sender = "<your_email>"
-        password = "<email_password>"
+        sender = "testingport123@gmail.com"
+        password = "tiplnjgnpqwgvuyo"
         yag = yagmail.SMTP(sender, password)
         yag.send(
             to=receiver,
@@ -111,9 +115,11 @@ def predict_heart():
             Avoid trans fats found in some processed and fried foods.
         3.1.3}Watch Sodium Intake:
         3.1.4}Limit your sodium intake by avoiding high-sodium processed foods and using herbs and spices for flavor.
+        
     3.2}Exercise: Engage in regular physical activity as advised by your healthcare provider. Even light exercises like walking can have significant benefits for your heart.
     3.3}Quit Smoking: If you smoke, consider quitting. Smoking is a major risk factor for heart disease and quitting can improve your cardiovascular health.
     3.4}Limit Alcohol Intake: If you consume alcohol, do so in moderation as excessive alcohol can have adverse effects on the heart.
+    
 4.Manage Stress:
     Practice stress-reducing techniques such as deep breathing, meditation, yoga, or any other activities that help you relax. Chronic stress can contribute to heart problems, so it's essential to find healthy ways to cope.
 
@@ -163,8 +169,8 @@ def predict_diabetes():
     if (diab_prediction[0] == 1):
         diab_diagnosis = 'The person is diabetic. A personalised email concerning the patient has been sent'
         receiver = email
-        sender = "<your_email>"
-        password = "<email_password>"
+        sender = "testingport123@gmail.com"
+        password = "tiplnjgnpqwgvuyo"
         yag = yagmail.SMTP(sender, password)
         yag.send(
             to=receiver,
@@ -253,8 +259,8 @@ def predict_lung():
     if (lung_pred[0] == 1):
         lung_pred = 'The person has chances of suffering from Lung Diseases.A personalised email concerning the patient has been sent'
         receiver = email
-        sender = "<your_email>"
-        password = "<email_password>"
+        sender = "testingport123@gmail.com"
+        password = "tiplnjgnpqwgvuyo"
         yag = yagmail.SMTP(sender, password)
         yag.send(
             to=receiver,
@@ -322,6 +328,24 @@ def feedback():
     result = {"message": "Feedback received successfully.Your feedback is highly valuable for better development"}
     st = "INSERT INTO feedback (name,email,rating,comment) VALUES ('{}','{}',{},'{}')".format(name,email,rating,comment
                                                                                   )
+    receiver = email
+    sender = "testingport123@gmail.com"
+    password = "tiplnjgnpqwgvuyo"
+    yag = yagmail.SMTP(sender, password)
+    con=f'''Dear {name},
+
+    We extend our heartfelt gratitude for sharing your valuable feedback on our Swasthrekha app. Your insights are immensely appreciated as they play a pivotal role in 
+    enhancing our services. We are committed to continuous improvement and ensuring a user-friendly experience. Your comments inspire us to strive for excellence and 
+    address any concerns effectively. Thank you for being an integral part of our journey towards promoting health and well-being. We value your contribution and look 
+    forward to serving you with even better solutions in the future.
+    
+    Best Regards,
+    Swastharekha'''
+    yag.send(
+        to=receiver,
+        subject="Your Feedback Report",
+        contents=con)
+
     cursor.execute(st);
     connection.commit()
     return jsonify(result)
