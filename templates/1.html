@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="{{ url_for('static', filename='1CSS.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='1CSS1.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 </head>
 <body>
@@ -17,7 +17,7 @@
   </div>
   <!-- Sidebar menu -->
   <div id="side">
-    <header>My App</header>
+    <header onclick="showContent('initial')">My App</header>
     <ul>
       <li><a href="#" onclick="showContent('heart')"><i class="fas fa-heart"></i>Heart Disease prediction</a></li>
       <li><a href="#" onclick="showContent('diabetes')"><i class="fas fa-vial"></i>Diabetes prediction</a></li>
@@ -27,43 +27,102 @@
   </div>
   <!-- Main content -->
   <div id="main">
+      <div id="initial">
       <p style="text-align: center">Swasthrekha is a website that cares about your well-being and wants to help you live a healthy and happy life.Swasthrekha is a website that uses machine learning algorithms to predict heart disease, lung cancer, and diabetes. It is a website that aims to help people monitor their health and prevent serious illnesses. Swasthrekha allows you to enter your personal and medical information, and get an assessment for each condition.</p>
+      </div>
     <!-- Heart disease prediction content -->
     <div id="heart" class="content">
       <h2>Heart Disease prediction</h2>
       <p>Enter the following information to get a prediction of your risk of having heart disease.</p>
       <!-- Heart disease prediction form -->
-      <form id="heart-form" onsubmit="submitForm(event, 'heart')" action="/predict/heart" method="POST">
-        <label for="age">Age:</label>
-        <input type="text" id="age" name="age" placeholder="Enter your age in years" required>
-        <label for="sex">Sex:</label>
-        <input type="text" id="sex" name="sex" placeholder="Enter 1 for male, 0 for female" required>
-        <label for="cp">Chest pain type:</label>
-        <input type="text" id="cp" name="cp" placeholder="Enter 0 for typical angina, 1 for atypical angina, 2 for non-anginal pain, 3 for asymptomatic" required>
-        <label for="trestbps">Resting blood pressure:</label>
-        <input type="text" id="trestbps" name="trestbps" placeholder="Enter your resting blood pressure in mm Hg" required>
-        <label for="chol">Cholestrol:</label>
-        <input type="text" id="chol" name="chol" placeholder="Cholestoral in mg/dl fetched via BMI sensor" required>
-        <label for="fbs">Fasting blood Sugar:</label>
-        <input type="text" id="fbs" name="fbs" placeholder="(fasting blood sugar > 120 mg/dl) (1 = true; 0 = false)" required>
-        <label for="rest_ecg">Resting electrocardiographic results:</label>
-        <input type="text" id="rest_ecg" name="rest_ecg" placeholder="(0 = normal, 1 = having ST-T wave abnormality, 2 = showing probable or definite left ventricular hypertrophy by Estes' criteria)" required>
-        <label for="thalach">Maximum heart rate achieved:</label>
-        <input type="text" id="thalach" name="thalach" placeholder="The person's maximum heart rate achieved" required>
-        <label for="exang">Exercise induced angina:</label>
-        <input type="text" id="exang" name="exang" placeholder=" (1 = yes; 0 = no)" required>
-        <label for="oldpeak">ST depression induced by exercise relative to rest:</label>
-        <input type="text" id="oldpeak" name="oldpeak" placeholder=" (1 = yes; 0 = no)" required>
-        <label for="slope">The slope of the peak exercise ST segment:</label>
-        <input type="text" id="slope" name="slope" placeholder="(Value 1: upsloping, Value 2: flat, Value 3: downsloping)" required>
-        <label for="ca">The number of major ca:</label>
-        <input type="text" id="ca" name="ca" placeholder=" (0-3)" required>
-        <label for="thal">A blood disorder called thalassemia :</label>
-        <input type="text" id="thal" name="thal" placeholder=" (1 =fixed defect (no blood flow in some part of the heart); 2 = normal blood flow; 3 = reversible defect (a blood flow is observed but it is not normal))" required>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email" required>
-        <button type="submit">Submit</button>
-      </form>
+        <form id="heart-form" onsubmit="submitForm(event, 'heart')" action="/predict/heart" method="POST">
+            <label for="age">Age:</label>
+            <input type="text" id="age" name="age" placeholder="Enter your age in years" required>
+
+            <label for="sex">Sex:</label>
+            <div class="select">
+                <select id="sex" name="sex" required>
+                    <option value="1">Male</option>
+                    <option value="0">Female</option>
+                </select>
+            </div>
+
+            <label for="cp">Chest pain type:</label>
+            <div class="select">
+                <select id="cp" name="cp" required>
+                    <option value="0">Typical Angina</option>
+                    <option value="1">Atypical Angina</option>
+                    <option value="2">Non-anginal Pain</option>
+                    <option value="3">Asymptomatic</option>
+                </select>
+            </div>
+
+            <label for="trestbps">Resting blood pressure:</label>
+            <input type="text" id="trestbps" name="trestbps" placeholder="Enter resting blood pressure in mm Hg" required>
+
+            <label for="chol">Cholesterol:</label>
+            <input type="text" id="chol" name="chol" placeholder="Enter cholesterol level in mg/dl" required>
+
+            <label for="fbs">Fasting blood sugar:</label>
+            <input type="text" id="fbs" name="fbs" placeholder="Enter Fasting blood sugar level in mg/dl" required>
+
+            <label for="rest_ecg">Resting electrocardiographic results:</label>
+            <div class="select">
+                <select id="rest_ecg" name="rest_ecg" required>
+                    <option value="0">Normal</option>
+                    <option value="1">ST-T Wave Abnormality</option>
+                    <option value="2">Probable or Definite Left Ventricular Hypertrophy</option>
+                </select>
+            </div>
+
+            <label for="thalach">Maximum heart rate achieved:</label>
+            <input type="text" id="thalach" name="thalach" placeholder="The person's maximum heart rate achieved" required>
+
+            <label for="exang">Exercise induced angina:</label>
+            <div class="select">
+                <select id="exang" name="exang" required>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+
+            <label for="oldpeak">ST depression induced by exercise relative to rest:</label>
+            <input type="text" id="oldpeak" name="oldpeak" placeholder="Enter depression value " required>
+
+            <label for="slope">The slope of the peak exercise ST segment:</label>
+            <div class="select">
+                <select id="slope" name="slope" required>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
+
+            <label for="ca">The number of major vessels:</label>
+            <div class="select">
+                <select id="ca" name="ca" required>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+
+            <label for="thal">A blood disorder called thalassemia:</label>
+            <div class="select">
+                <select id="thal" name="thal" required>
+                    <option value="1">Fixed Defect</option>
+                    <option value="2">Normal Blood Flow</option>
+                    <option value="3">Reversible Defect</option>
+                </select>
+            </div>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <button type="submit">Submit</button>
+        </form>
       <!-- Heart disethalach prediction result -->
       <div id="heart-result" class="result"></div>
     </div>
@@ -72,27 +131,41 @@
       <h2>Diabetes prediction</h2>
       <p>Enter the following information to get a prediction of your risk of having diabetes.</p>
       <!-- Diabetes prediction form -->
-      <form id="diabetes-form" onsubmit="submitForm(event, 'diabetes')" action="/predict/diabetes" method="POST">
+     <form id="diabetes-form" onsubmit="submitForm(event, 'diabetes')" action="/predict/diabetes" method="POST">
         <label for="pregnancies">Pregnancies:</label>
         <input type="text" id="pregnancies" name="pregnancies" placeholder="Enter the number of times you were pregnant" required>
+
         <label for="glucose">Glucose:</label>
-        <input type="text" id="glucose" name="glucose" placeholder="Enter your plasma glucose concentration in mg/dl" required>
+         <input type="text" id="glucose" name="glucose" placeholder="Enter your level of glucose " required>
+
         <label for="bloodpressure">Blood pressure:</label>
-        <input type="text" id="bloodpressure" name="bloodpressure" placeholder="Enter your diastolic blood pressure in mm Hg" required>
+        <input type="text" id="bloodpressure" name="bloodpressure" placeholder="Enter your blood pressure level  " required>
+
         <label for="skinthickness">Skin thickness:</label>
         <input type="text" id="skinthickness" name="skinthickness" placeholder="Enter your triceps skin fold thickness in mm" required>
+
         <label for="insulin">Insulin:</label>
         <input type="text" id="insulin" name="insulin" placeholder="2-Hour serum insulin (mu U/ml)" required>
+
         <label for="bmi">Body Mass Index:</label>
-        <input type="text" id="bmi" name="bmi" placeholder="Body mass index (weight in kg/(height in m)^2)" required>
+        <input type="text" id="bmi" name="bmi" placeholder="Enter your BMI " required>
+
         <label for="DiabetesPedigreeFunction">Diabetes Pedigree function value(DPF):</label>
-        <input type="text" id="DiabetesPedigreeFunction" name="DiabetesPedigreeFunction" placeholder="Enter DPF value between 0.08 to 2.42" required>
+         <input type="text" id="DiabetesPedigreeFunction" name="DiabetesPedigreeFunction" placeholder="Enter DPF value between 0.08 to 2.42" required>
+
         <label for="age">Age:</label>
-        <input type="text" id="age" name="age" placeholder="Enter your age in years" required>
+        <div class="select">
+            <select id="age" name="age" required>
+                <option value="1">Male</option>
+                <option value="0">Female</option>
+            </select>
+        </div>
+
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
         <button type="submit">Submit</button>
-      </form>
+    </form>
       <!-- Diabetes prediction result -->
       <div id="diabetes-result" class="result"></div>
     </div>
@@ -103,39 +176,125 @@
       <!-- Lung cancer form -->
       <form id="lung-form" onsubmit="submitForm(event, 'lung')" action="/predict/lung" method="POST">
         <label for="gender">Gender:</label>
-        <input type="text" id="gender" name="gender" placeholder="Enter your Gender (1 for male, 0 for female)" required>
+        <div class="select">
+            <select id="gender" name="gender" required>
+                <option value="1">Male</option>
+                <option value="0">Female</option>
+            </select>
+        </div>
+
         <label for="age">Age:</label>
         <input type="text" id="age" name="age" placeholder="Enter your age in years" required>
+
         <label for="smoking">Smoking:</label>
-        <input type="text" id="smoking" name="smoking" placeholder="Enter 1 if you are a smoker, 0 otherwise" required>
+        <div class="select">
+            <select id="smoking" name="smoking" required>
+                <option value="1">Smoker</option>
+                <option value="0">Non-smoker</option>
+            </select>
+        </div>
+
         <label for="yellow_fingers">Yellow fingers:</label>
-        <input type="text" id="yellow_fingers" name="yellow_fingers" placeholder="Enter 1 if you have yellow fingers, 0 otherwise" required>
+        <div class="select">
+            <select id="yellow_fingers" name="yellow_fingers" required>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+        </div>
+
         <label for="anxiety">Anxiety:</label>
-        <input type="text" id="anxiety" name="anxiety" placeholder="YES=2 , NO=1." required>
+        <div class="select">
+            <select id="anxiety" name="anxiety" required>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+            </select>
+        </div>
+
         <label for="peer_pressure">Peer Pressure:</label>
-        <input type="text" id="peer_pressure" name="peer_pressure" placeholder="YES=2 , NO=1." required>
+        <div class="select">
+            <select id="peer_pressure" name="peer_pressure" required>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+            </select>
+        </div>
+
         <label for="Chronic_Disease">Chronic Disease:</label>
-        <input type="text" id="Chronic_Disease" name="Chronic_Disease" placeholder="YES=2 , NO=1." required>
+        <div class="select">
+            <select id="Chronic_Disease" name="Chronic_Disease" required>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+            </select>
+        </div>
+
         <label for="Fatigue">Fatigue:</label>
-        <input type="text" id=Fatigue" name="Fatigue" placeholder="YES=2 , NO=1." required>
+        <div class="select">
+            <select id="Fatigue" name="Fatigue" required>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+            </select>
+        </div>
+
         <label for="Allergy">Allergy:</label>
-        <input type="text" id="Allergy" name="Allergy" placeholder="YES=2 , NO=1." required>
+        <div class="select">
+            <select id="Allergy" name="Allergy" required>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+            </select>
+        </div>
+
         <label for="wheezing">Wheezing:</label>
-        <input type="text" id="wheezing" name="wheezing" placeholder="YES=2 , NO=1." required>
+        <div class="select">
+            <select id="wheezing" name="wheezing" required>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+            </select>
+        </div>
+
         <label for="Alcohol">Alcohol:</label>
-        <input type="text" id="Alcohol" name="Alcohol" placeholder="YES=2 , NO=1." required>
+        <div class="select">
+            <select id="Alcohol" name="Alcohol" required>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+            </select>
+        </div>
+
         <label for="Coughing">Coughing:</label>
-        <input type="text" id="Coughing" name="Coughing" placeholder="YES=2 , NO=1." required>
+        <div class="select">
+            <select id="Coughing" name="Coughing" required>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+            </select>
+        </div>
+
         <label for="Shortness_of_Breath">Shortness of Breath:</label>
-        <input type="text" id="Shortness_of_Breath" name="Shortness_of_Breath" placeholder="YES=2 , NO=1." required>
+        <div class="select">
+            <select id="Shortness_of_Breath" name="Shortness_of_Breath" required>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+            </select>
+        </div>
+
         <label for="Swallowing_Difficulty">Swallowing Difficulty:</label>
-        <input type="text" id="Swallowing_Difficulty" name="Swallowing_Difficulty" placeholder="YES=2 , NO=1." required>
+        <div class="select">
+            <select id="Swallowing_Difficulty" name="Swallowing_Difficulty" required>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+            </select>
+        </div>
+
         <label for="Chest_pain">Chest pain:</label>
-        <input type="text" id="Chest_pain" name="Chest_pain" placeholder="YES=2 , NO=1." required>
+        <div class="select">
+            <select id="Chest_pain" name="Chest_pain" required>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+            </select>
+        </div>
+
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
         <button type="submit">Submit</button>
-      </form>
+    </form>
       <!-- Lung cancer result -->
       <div id="lung-result" class="result"></div>
     </div>
