@@ -31,6 +31,7 @@ p {
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #1a73e8;
+    margin-left: 245px;
 }
 
 /* Sidebar styles */
@@ -38,7 +39,7 @@ p {
     background-color: #ffffff;
     padding: 20px;
     left: 0px;
-    width: 220px;
+    width: 230px;
     height: 100vh;
     position: fixed;
     top: 0;
@@ -49,10 +50,16 @@ p {
 #side header {
   font-size: 22px;
   color: white;
-  line-height: 70px;
+  line-height: 60px;
   text-align: center;
   background: #063146;
   user-select: none;
+    margin-bottom: 10px;
+    transition: all .5s ease;
+}
+    
+#side header:hover{
+    background: rgba(77, 161, 178, 0.97);
 }
 
 #side ul {
@@ -70,11 +77,10 @@ p {
   height: 100%;
   width: 100%;
   line-height: 50px;
-  font-size: 17px;
+  font-size: 17.5px;
   color: #1a73e8 ;
-  box-sizing: border-box;
-  border-bottom: 1px solid black;
-    border-top: 1px solid rgba(255,255,255,.1);
+  /*box-sizing: border-box;*/
+  border-bottom: 3px solid #77d1dc;
   transition: .4s;
 }
 ul li:hover a{
@@ -93,7 +99,7 @@ ul li:hover a{
     background-color: #ffffff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease;
-    height: 100vh;
+    height: 100%;
 }
 
 .content {
@@ -121,15 +127,16 @@ input[type="email"] {
     border-radius: 4px;
     box-sizing: border-box;
     margin-bottom: 10px;
-    color: #333;
+    color: rgba(91, 86, 86, 0.94);
     transition: border-color 0.3s ease, color 0.3s ease;
+
 }
 
 input[type="text"]:focus,
 input[type="email"]:focus {
     outline: none;
-    border-color: #1a73e8;
-    box-shadow: 0 0 5px #1a73e8;
+    border-color: #6ba8fa;
+    box-shadow: 0 0 8px #4fffbc;
 }
 
 button[type="submit"] {
@@ -171,6 +178,56 @@ button[type="submit"] {
 .result {
     font-size: 16px;
     line-height: 1.4;
+}
+
+/* Add this style to your existing CSS file */
+
+select {
+   -webkit-appearance:none;
+   -moz-appearance:none;
+   -ms-appearance:none;
+   appearance:none;
+   outline:0;
+   box-shadow:none;
+   border:0!important;
+   background: #bbe6ef;
+   background-image: none;
+   flex: 1;
+   padding: 0 .5em;
+   color: rgb(91, 86, 86);
+   cursor:pointer;
+   font-size: 1em;
+   font-family: 'Open Sans', sans-serif;
+
+}
+select::-ms-expand {
+   display: none;
+}
+.select {
+   position: relative;
+   display: flex;
+   width: 50em;
+   height: 3em;
+   line-height: 3;
+   background: #3cb8e7;
+   overflow: hidden;
+   border-radius: .25em;
+    opacity: 50;
+    margin-bottom: 8px;
+}
+.select::after {
+   content: '\25BC';
+   position: absolute;
+   top: 0;
+   right: 0;
+   padding: 0 1em;
+   background: #63e1e1;
+   cursor:pointer;
+   pointer-events:none;
+   transition:.25s all ease;
+}
+.select:hover::after {
+   color: #1b8dff;
 }
 
 /* Add this style to your existing CSS file */
